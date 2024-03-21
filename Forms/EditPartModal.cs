@@ -1,4 +1,5 @@
-﻿using System;
+﻿using C968.Classes;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -7,51 +8,52 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Xml.Linq;
 
 namespace C968
 {
     public partial class EditPartModal : Form
     {
-        public string PartID { get; private set; }
-        public string PartName { get; private set; }
-        public string Inventory { get; private set; }
-        public string Price { get; private set; }
-        public string Min { get; private set; }
-        public string Max { get; private set; }
-        public string? MachineID { get; private set; }
-        public string? CompanyName { get; private set; }
+        private Part currentPart;
 
-        public EditPartModal(string partID, string name, string inventory, string price, string min, string max, string machineID, string companyName)
+        public EditPartModal(Part partToEdit)
         {
             InitializeComponent();
-            IDTextBox.Text = partID;
-            NameTextBox.Text = name;
-            InventoryTextBox.Text = inventory;
-            PartCostTextBox.Text = price;
-            MinTextBox.Text = min;
-            MaxTextBox.Text = max;
-            MachineIDTextBox.Text = machineID;
-            CompanyNameTextBox.Text = companyName;
-            if (machineID != null)
-            {
-                MachineIDTextBox.Visible = true;
-                MachineIDLabel.Visible = true;
-                CompanyNameTextBox.Visible = false;
-                CompanyNameLabel.Visible = false;
-                InHouseRadio.Checked = true;
-            }
-            else if (companyName != null)
-            {
-                CompanyNameTextBox.Visible = true;
-                CompanyNameLabel.Visible = true;
-                MachineIDLabel.Visible = false;
-                MachineIDTextBox.Visible = false;
-                OutsourceRadio.Checked = true;
-            }
+            currentPart = partToEdit;
+            PopulateFormFields(partToEdit);
             InHouseRadio.CheckedChanged += new EventHandler(radioButtons_CheckedChanged);
             OutsourceRadio.CheckedChanged += new EventHandler(radioButtons_CheckedChanged);
             SaveButton.Click += new EventHandler(SaveButton_Click);
             CancelButton.Click += new EventHandler(cancelButton_Click);
+        }
+
+        private void PopulateFormFields(Part part)
+        {
+            IDTextBox.Text = part.PartID.ToString();
+            NameTextBox.Text = part.Name;
+            InventoryTextBox.Text = part.InStock.ToString();
+            PartCostTextBox.Text = part.Price.ToString();
+            MinTextBox.Text = part.Min.ToString();
+            MaxTextBox.Text = part.Max.ToString();
+
+            if (part is Inhouse inhousePart)
+            {
+                MachineIDTextBox.Text = inhousePart.MachineID.ToString();
+                MachineIDLabel.Visible = true;
+                MachineIDTextBox.Visible = true;
+                CompanyNameLabel.Visible = false;
+                CompanyNameTextBox.Visible = false;
+                InHouseRadio.Checked = true;
+            }
+            else if (part is Outsourced outsourcedPart)
+            {
+                CompanyNameTextBox.Text = outsourcedPart.CompanyName;
+                MachineIDLabel.Visible = false;
+                MachineIDTextBox.Visible = false;
+                CompanyNameLabel.Visible = true;
+                CompanyNameTextBox.Visible = true;
+                OutsourceRadio.Checked = true;
+            }
         }
         private void radioButtons_CheckedChanged(object sender, EventArgs e)
         {
@@ -87,8 +89,8 @@ namespace C968
 
         private void SaveButton_Click(object sender, EventArgs e)
         {
-            int machineID = 0;
             bool isMachineIDParsed = false;
+            int machineID = 0;
 
             if (InHouseRadio.Checked)
             {
@@ -114,25 +116,68 @@ namespace C968
                 return;
             }
 
-            PartID = IDTextBox.Text;
-            PartName = NameTextBox.Text;
-            Inventory = InventoryTextBox.Text;
-            Price = PartCostTextBox.Text;
-            Min = MinTextBox.Text;
-            Max = MaxTextBox.Text;
-            if (InHouseRadio.Checked)
+            try
             {
-                MachineID = machineID.ToString();
-                CompanyName = null;
+                if (InHouseRadio.Checked)
+                {
+                    machineID = int.Parse(MachineIDTextBox.Text);
+                    if (currentPart is Inhouse inhousePart)
+                    {
+                        UpdateInhousePart(machineID);
+                    }
+                    else
+                    {
+                        currentPart = new Inhouse(partID, NameTextBox.Text, inventory, price, min, max, machineID);
+                    }
+                }
+                else
+                {
+                    string companyName = CompanyNameTextBox.Text;
+                    if (currentPart is Outsourced outsourcedPart)
+                    {
+                        UpdateOutsourcedPart(companyName);
+                    }
+                    else
+                    {
+                        currentPart = new Outsourced(partID, NameTextBox.Text, inventory, price, min, max, companyName);
+                    }
+                }
+                this.DialogResult = DialogResult.OK;
+                this.Close();
             }
-            else if (OutsourceRadio.Checked)
+            catch (Exception ex)
             {
-                CompanyName = CompanyNameTextBox.Text;
-                MachineID = null;
+                MessageBox.Show($"Error updating part: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+        }
 
-            this.DialogResult = DialogResult.OK;
-            this.Close();
+        private void UpdateInhousePart(int machineID)
+        {
+            var part = currentPart as Inhouse;
+            if (part != null)
+            {
+                UpdatePartCommonFields(part);
+                part.MachineID = machineID;
+            }
+        }
+
+        private void UpdateOutsourcedPart(string companyName)
+        {
+            var part = currentPart as Outsourced;
+            if (part != null)
+            {
+                UpdatePartCommonFields(part);
+                part.CompanyName = companyName;
+            }
+        }
+
+        private void UpdatePartCommonFields(Part part)
+        {
+            part.InStock = int.Parse(InventoryTextBox.Text);
+            part.Price = decimal.Parse(PartCostTextBox.Text);
+            part.Min = int.Parse(MinTextBox.Text);
+            part.Max = int.Parse(MaxTextBox.Text);
+            part.Name = NameTextBox.Text.ToString();
         }
     }
 }

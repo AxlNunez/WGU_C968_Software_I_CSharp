@@ -3,9 +3,9 @@ using System.Data;
 
 namespace C968
 {
-    public partial class MainForm : Form
+    public partial class Inventory : Form
     {
-        public MainForm()
+        public Inventory()
         {
             InitializeComponent();
             this.PartsAddButton.Click += new System.EventHandler(addPart);
@@ -55,6 +55,7 @@ namespace C968
                 {
                     PartsTable.Rows[index].Cells["CompanyName"].Value = outsourcedPart.CompanyName;
                 }
+                PartsTable.Rows[index].Tag = newPart;
             }
         }
 
@@ -84,33 +85,32 @@ namespace C968
             if (PartsTable.SelectedRows.Count > 0)
             {
                 DataGridViewRow selectedRow = PartsTable.SelectedRows[0];
-                EditPartModal editPartModal = new EditPartModal(
-                    selectedRow.Cells["PartID"].Value.ToString(),
-                    selectedRow.Cells["Name1"].Value.ToString(),
-                    selectedRow.Cells["Inventory"].Value.ToString(),
-                    selectedRow.Cells["Price"].Value.ToString(),
-                    selectedRow.Cells["Min"].Value.ToString(),
-                    selectedRow.Cells["Max"].Value.ToString(),
-                    selectedRow.Cells["MachineID"]?.Value?.ToString(),
-                    selectedRow.Cells["CompanyName"]?.Value?.ToString()
-                );
+                Part currentPart = selectedRow.Tag as Part;
+
+                if (currentPart == null)
+                {
+                    MessageBox.Show("No part selected or part information is missing.");
+                    return;
+                }
+
+                EditPartModal editPartModal = new EditPartModal(currentPart);
 
                 if (editPartModal.ShowDialog() == DialogResult.OK)
                 {
-                    selectedRow.Cells["PartID"].Value = editPartModal.PartID;
-                    selectedRow.Cells["Name1"].Value = editPartModal.PartName;
-                    selectedRow.Cells["Inventory"].Value = editPartModal.Inventory;
-                    selectedRow.Cells["Price"].Value = editPartModal.Price;
-                    selectedRow.Cells["Min"].Value = editPartModal.Min;
-                    selectedRow.Cells["Max"].Value = editPartModal.Max;
+                    selectedRow.Cells["PartID"].Value = currentPart.PartID.ToString();
+                    selectedRow.Cells["Name1"].Value = currentPart.Name;
+                    selectedRow.Cells["Inventory"].Value = currentPart.InStock.ToString();
+                    selectedRow.Cells["Price"].Value = currentPart.Price.ToString();
+                    selectedRow.Cells["Min"].Value = currentPart.Min.ToString();
+                    selectedRow.Cells["Max"].Value = currentPart.Max.ToString();
 
-                    if (editPartModal.MachineID != null)
+                    if (currentPart is Inhouse inhousePart)
                     {
-                        selectedRow.Cells["MachineID"].Value = editPartModal.MachineID;
+                        selectedRow.Cells["MachineID"].Value = inhousePart.MachineID.ToString();
                     }
-                    else if (editPartModal.CompanyName != null)
+                    else if (currentPart is Outsourced outsourcedPart)
                     {
-                        selectedRow.Cells["CompanyName"].Value = editPartModal.CompanyName;
+                        selectedRow.Cells["CompanyName"].Value = outsourcedPart.CompanyName;
                     }
                 }
             }
@@ -119,5 +119,6 @@ namespace C968
                 MessageBox.Show("Please select a part to edit.");
             }
         }
+
     }
 }

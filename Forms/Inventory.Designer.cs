@@ -3,7 +3,7 @@ using System.Xml.Linq;
 
 namespace C968
 {
-    partial class MainForm
+    partial class Inventory
     {
         /// <summary>
         ///  Required designer variable.
@@ -31,7 +31,7 @@ namespace C968
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Inventory));
             PartsTable = new DataGridView();
             IMSLabel = new Label();
             PartsLabel = new Label();
