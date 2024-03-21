@@ -33,12 +33,6 @@ namespace C968
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             PartsTable = new DataGridView();
-            PartID = new DataGridViewTextBoxColumn();
-            Name1 = new DataGridViewTextBoxColumn();
-            Inventory = new DataGridViewTextBoxColumn();
-            Price = new DataGridViewTextBoxColumn();
-            Min = new DataGridViewTextBoxColumn();
-            Max = new DataGridViewTextBoxColumn();
             IMSLabel = new Label();
             PartsLabel = new Label();
             ProductsTable = new DataGridView();
@@ -53,9 +47,17 @@ namespace C968
             SearchButton = new Button();
             SearchBar1 = new TextBox();
             SearchuButton1 = new Button();
-            AddButton = new Button();
-            ModifyButton = new Button();
-            DeleteButton = new Button();
+            PartsAddButton = new Button();
+            PartsModifyButton = new Button();
+            PartsDeleteButton = new Button();
+            PartID = new DataGridViewTextBoxColumn();
+            Name1 = new DataGridViewTextBoxColumn();
+            Inventory = new DataGridViewTextBoxColumn();
+            Price = new DataGridViewTextBoxColumn();
+            Min = new DataGridViewTextBoxColumn();
+            Max = new DataGridViewTextBoxColumn();
+            MachineID = new DataGridViewTextBoxColumn();
+            CompanyName = new DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)PartsTable).BeginInit();
             ((System.ComponentModel.ISupportInitialize)ProductsTable).BeginInit();
             SuspendLayout();
@@ -63,55 +65,21 @@ namespace C968
             // PartsTable
             // 
             PartsTable.AccessibleName = "PartsTable";
+            PartsTable.AllowUserToAddRows = false;
             PartsTable.AllowUserToResizeColumns = false;
             PartsTable.AllowUserToResizeRows = false;
             PartsTable.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            PartsTable.Columns.AddRange(new DataGridViewColumn[] { PartID, Name1, Inventory, Price, Min, Max });
+            PartsTable.Columns.AddRange(new DataGridViewColumn[] { PartID, Name1, Inventory, Price, Min, Max, MachineID, CompanyName });
             PartsTable.Location = new Point(12, 95);
             PartsTable.MultiSelect = false;
             PartsTable.Name = "PartsTable";
             PartsTable.RowHeadersVisible = false;
             PartsTable.RowTemplate.Height = 25;
+            PartsTable.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             PartsTable.ShowEditingIcon = false;
             PartsTable.ShowRowErrors = false;
             PartsTable.Size = new Size(607, 299);
             PartsTable.TabIndex = 0;
-            // 
-            // PartID
-            // 
-            PartID.HeaderText = "Part ID";
-            PartID.Name = "PartID";
-            PartID.ReadOnly = true;
-            // 
-            // Name1
-            // 
-            Name1.HeaderText = "Name";
-            Name1.Name = "Name1";
-            Name1.ReadOnly = true;
-            // 
-            // Inventory
-            // 
-            Inventory.HeaderText = "Inventory";
-            Inventory.Name = "Inventory";
-            Inventory.ReadOnly = true;
-            // 
-            // Price
-            // 
-            Price.HeaderText = "Price";
-            Price.Name = "Price";
-            Price.ReadOnly = true;
-            // 
-            // Min
-            // 
-            Min.HeaderText = "Min";
-            Min.Name = "Min";
-            Min.ReadOnly = true;
-            // 
-            // Max
-            // 
-            Max.HeaderText = "Max";
-            Max.Name = "Max";
-            Max.ReadOnly = true;
             // 
             // IMSLabel
             // 
@@ -135,6 +103,7 @@ namespace C968
             // 
             // ProductsTable
             // 
+            ProductsTable.AllowUserToAddRows = false;
             ProductsTable.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             ProductsTable.Columns.AddRange(new DataGridViewColumn[] { ProductID, Name2, Inventory1, Price1, Min1, Max1 });
             ProductsTable.Location = new Point(641, 95);
@@ -227,41 +196,90 @@ namespace C968
             SearchuButton1.Text = "Search";
             SearchuButton1.UseVisualStyleBackColor = true;
             // 
-            // AddButton
+            // PartsAddButton
             // 
-            AddButton.Location = new Point(382, 400);
-            AddButton.Name = "AddButton";
-            AddButton.Size = new Size(75, 29);
-            AddButton.TabIndex = 10;
-            AddButton.Text = "Add";
-            AddButton.UseVisualStyleBackColor = true;
+            PartsAddButton.Location = new Point(382, 400);
+            PartsAddButton.Name = "PartsAddButton";
+            PartsAddButton.Size = new Size(75, 29);
+            PartsAddButton.TabIndex = 10;
+            PartsAddButton.Text = "Add";
+            PartsAddButton.UseVisualStyleBackColor = true;
             // 
-            // ModifyButton
+            // PartsModifyButton
             // 
-            ModifyButton.Location = new Point(463, 400);
-            ModifyButton.Name = "ModifyButton";
-            ModifyButton.Size = new Size(75, 29);
-            ModifyButton.TabIndex = 11;
-            ModifyButton.Text = "Modify";
-            ModifyButton.UseVisualStyleBackColor = true;
+            PartsModifyButton.Location = new Point(463, 400);
+            PartsModifyButton.Name = "PartsModifyButton";
+            PartsModifyButton.Size = new Size(75, 29);
+            PartsModifyButton.TabIndex = 11;
+            PartsModifyButton.Text = "Modify";
+            PartsModifyButton.UseVisualStyleBackColor = true;
             // 
-            // DeleteButton
+            // PartsDeleteButton
             // 
-            DeleteButton.Location = new Point(544, 400);
-            DeleteButton.Name = "DeleteButton";
-            DeleteButton.Size = new Size(75, 29);
-            DeleteButton.TabIndex = 12;
-            DeleteButton.Text = "Delete";
-            DeleteButton.UseVisualStyleBackColor = true;
+            PartsDeleteButton.Location = new Point(544, 400);
+            PartsDeleteButton.Name = "PartsDeleteButton";
+            PartsDeleteButton.Size = new Size(75, 29);
+            PartsDeleteButton.TabIndex = 12;
+            PartsDeleteButton.Text = "Delete";
+            PartsDeleteButton.UseVisualStyleBackColor = true;
+            // 
+            // PartID
+            // 
+            PartID.HeaderText = "Part ID";
+            PartID.Name = "PartID";
+            PartID.ReadOnly = true;
+            // 
+            // Name1
+            // 
+            Name1.HeaderText = "Name";
+            Name1.Name = "Name1";
+            Name1.ReadOnly = true;
+            // 
+            // Inventory
+            // 
+            Inventory.HeaderText = "Inventory";
+            Inventory.Name = "Inventory";
+            Inventory.ReadOnly = true;
+            // 
+            // Price
+            // 
+            Price.HeaderText = "Price";
+            Price.Name = "Price";
+            Price.ReadOnly = true;
+            // 
+            // Min
+            // 
+            Min.HeaderText = "Min";
+            Min.Name = "Min";
+            Min.ReadOnly = true;
+            // 
+            // Max
+            // 
+            Max.HeaderText = "Max";
+            Max.Name = "Max";
+            Max.ReadOnly = true;
+            // 
+            // MachineID
+            // 
+            MachineID.HeaderText = "Machine ID";
+            MachineID.Name = "MachineID";
+            MachineID.ReadOnly = true;
+            MachineID.Visible = false;
+            // 
+            // CompanyName
+            // 
+            CompanyName.HeaderText = "Company Name";
+            CompanyName.Name = "CompanyName";
+            CompanyName.Visible = false;
             // 
             // MainForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1257, 512);
-            Controls.Add(DeleteButton);
-            Controls.Add(ModifyButton);
-            Controls.Add(AddButton);
+            Controls.Add(PartsDeleteButton);
+            Controls.Add(PartsModifyButton);
+            Controls.Add(PartsAddButton);
             Controls.Add(SearchuButton1);
             Controls.Add(SearchBar1);
             Controls.Add(SearchButton);
@@ -284,12 +302,6 @@ namespace C968
         #endregion
 
         private DataGridView PartsTable;
-        private DataGridViewTextBoxColumn PartID;
-        private DataGridViewTextBoxColumn Name1;
-        private DataGridViewTextBoxColumn Inventory;
-        private DataGridViewTextBoxColumn Price;
-        private DataGridViewTextBoxColumn Min;
-        private DataGridViewTextBoxColumn Max;
         private Label IMSLabel;
         private Label PartsLabel;
         private DataGridView ProductsTable;
@@ -304,8 +316,16 @@ namespace C968
         private Button SearchButton;
         private TextBox SearchBar1;
         private Button SearchuButton1;
-        private Button AddButton;
-        private Button ModifyButton;
-        private Button DeleteButton;
+        private Button PartsAddButton;
+        private Button PartsModifyButton;
+        private Button PartsDeleteButton;
+        private DataGridViewTextBoxColumn PartID;
+        private DataGridViewTextBoxColumn Name1;
+        private DataGridViewTextBoxColumn Inventory;
+        private DataGridViewTextBoxColumn Price;
+        private DataGridViewTextBoxColumn Min;
+        private DataGridViewTextBoxColumn Max;
+        private DataGridViewTextBoxColumn MachineID;
+        private DataGridViewTextBoxColumn CompanyName;
     }
 }

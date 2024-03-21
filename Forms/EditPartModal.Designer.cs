@@ -1,6 +1,6 @@
 ﻿namespace C968
 {
-    partial class AddPartModal
+    partial class EditPartModal
     {
         /// <summary>
         /// Required designer variable.
@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(AddPartModal));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(EditPartModal));
             InHouseRadio = new RadioButton();
             label1 = new Label();
             OutsourceRadio = new RadioButton();
@@ -68,9 +68,9 @@
             label1.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point);
             label1.Location = new Point(21, 9);
             label1.Name = "label1";
-            label1.Size = new Size(76, 21);
+            label1.Size = new Size(75, 21);
             label1.TabIndex = 1;
-            label1.Text = "Add Part";
+            label1.Text = "Edit Part";
             // 
             // OutsourceRadio
             // 
@@ -159,72 +159,65 @@
             // NameTextBox
             // 
             NameTextBox.BorderStyle = BorderStyle.FixedSingle;
-            NameTextBox.Enabled = false;
             NameTextBox.Location = new Point(113, 89);
             NameTextBox.Name = "NameTextBox";
             NameTextBox.PlaceholderText = "Enter text";
             NameTextBox.Size = new Size(100, 23);
-            NameTextBox.TabIndex = 1;
+            NameTextBox.TabIndex = 2;
             // 
             // InventoryTextBox
             // 
             InventoryTextBox.BorderStyle = BorderStyle.FixedSingle;
-            InventoryTextBox.Enabled = false;
             InventoryTextBox.Location = new Point(113, 116);
             InventoryTextBox.Name = "InventoryTextBox";
             InventoryTextBox.PlaceholderText = "Enter a number";
             InventoryTextBox.Size = new Size(100, 23);
-            InventoryTextBox.TabIndex = 2;
+            InventoryTextBox.TabIndex = 3;
             // 
             // PartCostTextBox
             // 
             PartCostTextBox.BorderStyle = BorderStyle.FixedSingle;
-            PartCostTextBox.Enabled = false;
             PartCostTextBox.Location = new Point(113, 143);
             PartCostTextBox.Name = "PartCostTextBox";
             PartCostTextBox.PlaceholderText = "Enter a decimal";
             PartCostTextBox.Size = new Size(100, 23);
-            PartCostTextBox.TabIndex = 3;
+            PartCostTextBox.TabIndex = 4;
             // 
             // MaxTextBox
             // 
             MaxTextBox.BorderStyle = BorderStyle.FixedSingle;
-            MaxTextBox.Enabled = false;
             MaxTextBox.Location = new Point(113, 200);
             MaxTextBox.Name = "MaxTextBox";
             MaxTextBox.PlaceholderText = "Enter a number";
             MaxTextBox.Size = new Size(100, 23);
-            MaxTextBox.TabIndex = 5;
+            MaxTextBox.TabIndex = 6;
             // 
             // MachineIDTextBox
             // 
             MachineIDTextBox.BorderStyle = BorderStyle.FixedSingle;
-            MachineIDTextBox.Enabled = false;
             MachineIDTextBox.Location = new Point(113, 230);
             MachineIDTextBox.Name = "MachineIDTextBox";
             MachineIDTextBox.PlaceholderText = "Enter a number";
             MachineIDTextBox.Size = new Size(100, 23);
-            MachineIDTextBox.TabIndex = 7;
+            MachineIDTextBox.TabIndex = 8;
             MachineIDTextBox.Visible = false;
             // 
             // CompanyNameTextBox
             // 
             CompanyNameTextBox.BorderStyle = BorderStyle.FixedSingle;
-            CompanyNameTextBox.Enabled = false;
             CompanyNameTextBox.Location = new Point(113, 230);
             CompanyNameTextBox.Name = "CompanyNameTextBox";
             CompanyNameTextBox.PlaceholderText = "Enter text";
             CompanyNameTextBox.Size = new Size(100, 23);
-            CompanyNameTextBox.TabIndex = 6;
+            CompanyNameTextBox.TabIndex = 7;
             CompanyNameTextBox.Visible = false;
             // 
             // SaveButton
             // 
-            SaveButton.Enabled = false;
             SaveButton.Location = new Point(79, 268);
             SaveButton.Name = "SaveButton";
             SaveButton.Size = new Size(75, 23);
-            SaveButton.TabIndex = 8;
+            SaveButton.TabIndex = 9;
             SaveButton.Text = "Save";
             SaveButton.UseVisualStyleBackColor = true;
             // 
@@ -233,19 +226,18 @@
             CancelButton.Location = new Point(173, 268);
             CancelButton.Name = "CancelButton";
             CancelButton.Size = new Size(75, 23);
-            CancelButton.TabIndex = 9;
+            CancelButton.TabIndex = 10;
             CancelButton.Text = "Cancel";
             CancelButton.UseVisualStyleBackColor = true;
             // 
             // MinTextBox
             // 
             MinTextBox.BorderStyle = BorderStyle.FixedSingle;
-            MinTextBox.Enabled = false;
             MinTextBox.Location = new Point(113, 171);
             MinTextBox.Name = "MinTextBox";
             MinTextBox.PlaceholderText = "Enter a number";
             MinTextBox.Size = new Size(100, 23);
-            MinTextBox.TabIndex = 4;
+            MinTextBox.TabIndex = 5;
             // 
             // MinLabel
             // 
@@ -256,7 +248,7 @@
             MinLabel.TabIndex = 19;
             MinLabel.Text = "Min";
             // 
-            // AddPartModal
+            // EditPartModal
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
@@ -283,9 +275,9 @@
             Controls.Add(label1);
             Controls.Add(InHouseRadio);
             Icon = (Icon)resources.GetObject("$this.Icon");
-            Name = "AddPartModal";
+            Name = "EditPartModal";
             StartPosition = FormStartPosition.CenterScreen;
-            Text = "Add New Part";
+            Text = "Edit Part";
             ResumeLayout(false);
             PerformLayout();
         }

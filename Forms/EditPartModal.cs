@@ -1,48 +1,58 @@
-﻿using C968.Classes;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
-using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
-using System.Reflection.PortableExecutable;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace C968
 {
-    public partial class AddPartModal : Form
+    public partial class EditPartModal : Form
     {
-        public Part CreatedPart { get; private set; }
+        public string PartID { get; private set; }
+        public string PartName { get; private set; }
+        public string Inventory { get; private set; }
+        public string Price { get; private set; }
+        public string Min { get; private set; }
+        public string Max { get; private set; }
+        public string? MachineID { get; private set; }
+        public string? CompanyName { get; private set; }
 
-        public AddPartModal(int nextPartID)
+        public EditPartModal(string partID, string name, string inventory, string price, string min, string max, string machineID, string companyName)
         {
             InitializeComponent();
-            IDTextBox.Text = nextPartID.ToString();
+            IDTextBox.Text = partID;
+            NameTextBox.Text = name;
+            InventoryTextBox.Text = inventory;
+            PartCostTextBox.Text = price;
+            MinTextBox.Text = min;
+            MaxTextBox.Text = max;
+            MachineIDTextBox.Text = machineID;
+            CompanyNameTextBox.Text = companyName;
+            if (machineID != null)
+            {
+                MachineIDTextBox.Visible = true;
+                MachineIDLabel.Visible = true;
+                CompanyNameTextBox.Visible = false;
+                CompanyNameLabel.Visible = false;
+                InHouseRadio.Checked = true;
+            }
+            else if (companyName != null)
+            {
+                CompanyNameTextBox.Visible = true;
+                CompanyNameLabel.Visible = true;
+                MachineIDLabel.Visible = false;
+                MachineIDTextBox.Visible = false;
+                OutsourceRadio.Checked = true;
+            }
             InHouseRadio.CheckedChanged += new EventHandler(radioButtons_CheckedChanged);
             OutsourceRadio.CheckedChanged += new EventHandler(radioButtons_CheckedChanged);
-            CancelButton.Click += new EventHandler(cancelButton_Click);
-            NameTextBox.TextChanged += (sender, e) => UpdateSaveButtonState();
-            InventoryTextBox.TextChanged += (sender, e) => UpdateSaveButtonState();
-            PartCostTextBox.TextChanged += (sender, e) => UpdateSaveButtonState();
-            MinTextBox.TextChanged += (sender, e) => UpdateSaveButtonState();
-            MaxTextBox.TextChanged += (sender, e) => UpdateSaveButtonState();
-            CompanyNameTextBox.TextChanged += (sender, e) => UpdateSaveButtonState();
-            MachineIDTextBox.TextChanged += (sender, e) => UpdateSaveButtonState();
-            InHouseRadio.CheckedChanged += (sender, e) => UpdateSaveButtonState();
-            OutsourceRadio.CheckedChanged += (sender, e) => UpdateSaveButtonState();
-            UpdateSaveButtonState();
             SaveButton.Click += new EventHandler(SaveButton_Click);
+            CancelButton.Click += new EventHandler(cancelButton_Click);
         }
-
-        private void cancelButton_Click(object sender, EventArgs e)
-        {
-            this.DialogResult = DialogResult.Cancel;
-            this.Close();
-        }
-
         private void radioButtons_CheckedChanged(object sender, EventArgs e)
         {
             if (InHouseRadio.Checked)
@@ -69,39 +79,21 @@ namespace C968
 
         }
 
-        private void UpdateSaveButtonState()
+        private void cancelButton_Click(object sender, EventArgs e)
         {
-            bool allFieldsFilled = true;
-
-            TextBox[] mandatoryTextboxes = new TextBox[]
-            {
-        NameTextBox, InventoryTextBox, PartCostTextBox, MinTextBox, MaxTextBox
-            };
-
-            foreach (TextBox tb in mandatoryTextboxes)
-            {
-                if (string.IsNullOrWhiteSpace(tb.Text))
-                {
-                    allFieldsFilled = false;
-                    break;
-                }
-            }
-
-            if (InHouseRadio.Checked)
-            {
-                allFieldsFilled &= !string.IsNullOrWhiteSpace(MachineIDTextBox.Text);
-            }
-            else if (OutsourceRadio.Checked)
-            {
-                allFieldsFilled &= !string.IsNullOrWhiteSpace(CompanyNameTextBox.Text);
-            }
-
-            SaveButton.Enabled = allFieldsFilled;
+            this.DialogResult = DialogResult.Cancel;
+            this.Close();
         }
 
         private void SaveButton_Click(object sender, EventArgs e)
         {
             int machineID = 0;
+            bool isMachineIDParsed = false;
+
+            if (InHouseRadio.Checked)
+            {
+                isMachineIDParsed = int.TryParse(MachineIDTextBox.Text, out machineID);
+            }
 
             if (!int.TryParse(IDTextBox.Text, out int partID) ||
                 string.IsNullOrWhiteSpace(NameTextBox.Text) ||
@@ -109,7 +101,7 @@ namespace C968
                 !decimal.TryParse(PartCostTextBox.Text, out decimal price) ||
                 !int.TryParse(MinTextBox.Text, out int min) ||
                 !int.TryParse(MaxTextBox.Text, out int max) ||
-                (InHouseRadio.Checked && !int.TryParse(MachineIDTextBox.Text, out machineID)) ||
+                (InHouseRadio.Checked && !isMachineIDParsed) ||
                 (OutsourceRadio.Checked && string.IsNullOrWhiteSpace(CompanyNameTextBox.Text)))
             {
                 MessageBox.Show("Please correct your input. Ensure all fields are filled out correctly and numerical fields contain valid numbers.", "Input Validation Failed", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -122,19 +114,25 @@ namespace C968
                 return;
             }
 
+            PartID = IDTextBox.Text;
+            PartName = NameTextBox.Text;
+            Inventory = InventoryTextBox.Text;
+            Price = PartCostTextBox.Text;
+            Min = MinTextBox.Text;
+            Max = MaxTextBox.Text;
             if (InHouseRadio.Checked)
             {
-                CreatedPart = new Inhouse(partID, NameTextBox.Text, inventory, price, min, max, machineID);
+                MachineID = machineID.ToString();
+                CompanyName = null;
             }
             else if (OutsourceRadio.Checked)
             {
-                CreatedPart = new Outsourced(partID, NameTextBox.Text, inventory, price, min, max, CompanyNameTextBox.Text);
+                CompanyName = CompanyNameTextBox.Text;
+                MachineID = null;
             }
 
             this.DialogResult = DialogResult.OK;
             this.Close();
         }
-
-
     }
 }
