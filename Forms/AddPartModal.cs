@@ -21,9 +21,9 @@ namespace C968
         {
             InitializeComponent();
             IDTextBox.Text = nextPartID.ToString();
-            InHouseRadio.CheckedChanged += new EventHandler(radioButtons_CheckedChanged);
-            OutsourceRadio.CheckedChanged += new EventHandler(radioButtons_CheckedChanged);
-            CancelButton.Click += new EventHandler(cancelButton_Click);
+            InHouseRadio.CheckedChanged += radioButtons_CheckedChanged;
+            OutsourceRadio.CheckedChanged += radioButtons_CheckedChanged;
+            CancelButton.Click += cancelButton_Click;
             NameTextBox.TextChanged += (sender, e) => UpdateSaveButtonState();
             InventoryTextBox.TextChanged += (sender, e) => UpdateSaveButtonState();
             PartCostTextBox.TextChanged += (sender, e) => UpdateSaveButtonState();
@@ -34,7 +34,7 @@ namespace C968
             InHouseRadio.CheckedChanged += (sender, e) => UpdateSaveButtonState();
             OutsourceRadio.CheckedChanged += (sender, e) => UpdateSaveButtonState();
             UpdateSaveButtonState();
-            SaveButton.Click += new EventHandler(SaveButton_Click);
+            SaveButton.Click += SaveButton_Click;
         }
 
         private void cancelButton_Click(object sender, EventArgs e)
@@ -134,7 +134,5 @@ namespace C968
             this.DialogResult = DialogResult.OK;
             this.Close();
         }
-
-
     }
 }

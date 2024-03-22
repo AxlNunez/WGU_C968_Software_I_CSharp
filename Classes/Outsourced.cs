@@ -10,8 +10,8 @@ namespace C968.Classes
     {
         public string CompanyName { get; set; }
 
-        public Outsourced(int partID, string partName, int inventory, decimal price, int min, int max, string companyName)
-            : base(partID, partName, inventory, price, min, max)
+        public Outsourced(int partID, string name, int inStock, decimal price, int min, int max, string companyName)
+            : base(partID, name, price, inStock, min, max)
         {
             CompanyName = companyName;
         }

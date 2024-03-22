@@ -154,7 +154,7 @@
             IDTextBox.Location = new Point(113, 62);
             IDTextBox.Name = "IDTextBox";
             IDTextBox.Size = new Size(100, 23);
-            IDTextBox.TabIndex = 1;
+            IDTextBox.TabIndex = 0;
             // 
             // NameTextBox
             // 

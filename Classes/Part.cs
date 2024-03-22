@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel;
 
 namespace C968.Classes
 {
@@ -15,12 +11,12 @@ namespace C968.Classes
         public int Min { get; set; }
         public int Max { get; set; }
 
-        protected Part(int partID, string partName, int inventory, decimal price, int min, int max)
+        protected Part(int partID, string name, decimal price, int inStock, int min, int max)
         {
             PartID = partID;
-            Name = partName;
-            InStock = inventory;
+            Name = name;
             Price = price;
+            InStock = inStock;
             Min = min;
             Max = max;
         }

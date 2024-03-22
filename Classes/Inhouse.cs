@@ -10,8 +10,8 @@ namespace C968.Classes
     {
         public int MachineID { get; set; }
 
-        public Inhouse(int partID, string partName, int inventory, decimal price, int min, int max, int machineID)
-            : base(partID, partName, inventory, price, min, max)
+        public Inhouse(int partID, string name, int inStock, decimal price, int min, int max, int machineID)
+            : base(partID, name, price, inStock, min, max)
         {
             MachineID = machineID;
         }
