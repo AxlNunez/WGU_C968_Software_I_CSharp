@@ -5,15 +5,18 @@ using System.Windows.Forms;
 
 namespace C968.Forms
 {
-    public partial class AddProductModal : Form
+    public partial class EditProductModal : Form
     {
-        public Product CreatedProduct { get; private set; }
+        public Product currentProduct { get; private set; }
 
-        public AddProductModal(int nextProductID)
+        public EditProductModal(Product productToEdit)
         {
             InitializeComponent();
+            currentProduct = productToEdit;
             LoadPartsTable();
-            IDTextBox.Text = nextProductID.ToString();
+            LoadAssociatedParts();
+            PopulateFormFields(productToEdit);
+
             SaveButton.Click += SaveButton_Click;
             CancelButton.Click += CancelButton_Click;
             PartsAddButton.Click += PartsAddButton_Click;
@@ -35,6 +38,16 @@ namespace C968.Forms
             {
                 int index = PartsTable.Rows.Add();
                 SetPartRow(index, part, PartsTable);
+            }
+        }
+
+        private void LoadAssociatedParts()
+        {
+            ProductPartsTable.Rows.Clear();
+            foreach (Part part in currentProduct.AssociatedParts)
+            {
+                int rowIndex = ProductPartsTable.Rows.Add();
+                SetAssociatedPartRow(rowIndex, part, ProductPartsTable);
             }
         }
 
@@ -66,7 +79,26 @@ namespace C968.Forms
             table.Rows[index].Cells["Price1"].Value = $"${part.Price}";
             table.Rows[index].Cells["Min1"].Value = part.Min.ToString();
             table.Rows[index].Cells["Max1"].Value = part.Max.ToString();
+
+            if (part is Inhouse inhousePart)
+            {
+                table.Rows[index].Cells["MachineID1"].Value = inhousePart.MachineID.ToString();
+            }
+            else if (part is Outsourced outsourcedPart)
+            {
+                table.Rows[index].Cells["CompanyName1"].Value = outsourcedPart.CompanyName;
+            }
             table.Rows[index].Tag = part;
+        }
+
+        private void PopulateFormFields(Product product)
+        {
+            IDTextBox.Text = product.ProductID.ToString();
+            NameTextBox.Text = product.Name;
+            InventoryTextBox.Text = product.InStock.ToString();
+            PartCostTextBox.Text = product.Price.ToString();
+            MinTextBox.Text = product.Min.ToString();
+            MaxTextBox.Text = product.Max.ToString();
         }
 
         private void UpdateSaveButtonState()
@@ -100,27 +132,16 @@ namespace C968.Forms
 
         private void SaveButton_Click(object sender, EventArgs e)
         {
-            if (!int.TryParse(InventoryTextBox.Text, out int inventory) ||
-                !decimal.TryParse(PartCostTextBox.Text, out decimal price) ||
-                !int.TryParse(MinTextBox.Text, out int min) ||
-                !int.TryParse(MaxTextBox.Text, out int max) || inventory < min || inventory > max)
+            if (ValidateInput(out var updatedProduct))
             {
-                MessageBox.Show("Please check your input values. Inventory must be between Min and Max.", "Invalid Input", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
+                Inventory.UpdateProduct(updatedProduct.ProductID, updatedProduct);
+                this.DialogResult = DialogResult.OK;
+                this.Close();
             }
-
-            CreatedProduct = new Product(int.Parse(IDTextBox.Text), NameTextBox.Text, price, inventory, min, max);
-
-            foreach (DataGridViewRow row in ProductPartsTable.Rows)
+            else
             {
-                if (row.Tag is Part part)
-                {
-                    CreatedProduct.addAssociatedPart(part);
-                }
+                MessageBox.Show("Input validation failed.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-
-            this.DialogResult = DialogResult.OK;
-            this.Close();
         }
 
         private void CancelButton_Click(object sender, EventArgs e)
@@ -149,6 +170,39 @@ namespace C968.Forms
             {
                 ProductPartsTable.Rows.RemoveAt(row.Index);
             }
+        }
+
+        private bool ValidateInput(out Product updatedProduct)
+        {
+            updatedProduct = null;
+
+            if (string.IsNullOrWhiteSpace(NameTextBox.Text) ||
+                !int.TryParse(InventoryTextBox.Text, out int inventory) ||
+                !decimal.TryParse(PartCostTextBox.Text, out decimal price) ||
+                !int.TryParse(MinTextBox.Text, out int min) ||
+                !int.TryParse(MaxTextBox.Text, out int max) || min > max)
+            {
+                MessageBox.Show("Validation failed. Please check all input fields.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return false;
+            }
+
+            currentProduct.Name = NameTextBox.Text;
+            currentProduct.Price = price;
+            currentProduct.InStock = inventory;
+            currentProduct.Min = min;
+            currentProduct.Max = max;
+
+            currentProduct.AssociatedParts.Clear();
+            foreach (DataGridViewRow row in ProductPartsTable.Rows)
+            {
+                if (row.Tag is Part part)
+                {
+                    currentProduct.addAssociatedPart(part);
+                }
+            }
+
+            updatedProduct = currentProduct;
+            return true;
         }
     }
 }

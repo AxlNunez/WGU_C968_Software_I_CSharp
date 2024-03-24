@@ -9,16 +9,25 @@ namespace C968.Classes
         public static BindingList<Part> AllParts { get; } = new BindingList<Part>();
 
         public static void AddProduct(Product product) => Products.Add(product);
-        public static bool RemoveProduct(int productID)
-        {
-            var product = Products.FirstOrDefault(p => p.ProductID == productID);
-            return product != null && Products.Remove(product);
-        }
+        public static bool RemoveProduct(Product product) => Products.Remove(product);
         public static Product LookupProduct(int productID) => Products.FirstOrDefault(p => p.ProductID == productID);
         public static void UpdateProduct(int productID, Product updatedProduct)
         {
             var productIndex = Products.ToList().FindIndex(p => p.ProductID == productID);
-            if (productIndex != -1) Products[productIndex] = updatedProduct;
+            if (productIndex != -1)
+            {
+                Products[productIndex].Name = updatedProduct.Name;
+                Products[productIndex].Price = updatedProduct.Price;
+                Products[productIndex].InStock = updatedProduct.InStock;
+                Products[productIndex].Min = updatedProduct.Min;
+                Products[productIndex].Max = updatedProduct.Max;
+
+                Products[productIndex].AssociatedParts.Clear();
+                foreach (var part in updatedProduct.AssociatedParts)
+                {
+                    Products[productIndex].addAssociatedPart(part);
+                }
+            }
         }
 
         public static void AddPart(Part part) => AllParts.Add(part);

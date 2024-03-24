@@ -13,8 +13,8 @@ namespace C968
             InitializeComponent();
 
             ProductAddButton.Click += addProduct;
-            ProductModifyButton.Click += updatePart;
-            ProductDeleteButton.Click += deletePart;
+            ProductModifyButton.Click += updateProduct;
+            ProductDeleteButton.Click += removeProduct;
             ProductSearchButton.Click += searchProductButton_Click;
 
             PartsAddButton.Click += addPart;
@@ -22,8 +22,9 @@ namespace C968
             PartsDeleteButton.Click += deletePart;
             PartsSearchButton.Click += searchPartButton_Click;
 
+            ExitButton.Click += ExitButton_Click;
+
             LoadPartsTable();
-            
         }
 
         private void LoadPartsTable()
@@ -37,13 +38,14 @@ namespace C968
         }
         private void LoadProductsTable()
         {
-            ProductsTable.Rows.Clear(); 
+            ProductsTable.Rows.Clear();
             foreach (var product in Inventory.Products)
             {
                 int index = ProductsTable.Rows.Add();
                 SetProductRow(index, product);
             }
         }
+
 
         private void SetPartRow(int index, Part part)
         {
@@ -76,6 +78,7 @@ namespace C968
             ProductsTable.Rows[index].Tag = product;
         }
 
+
         public void addProduct(object sender, EventArgs e)
         {
             if (PartsTable.Rows.Count == 0)
@@ -94,9 +97,28 @@ namespace C968
             }
         }
 
-        public bool removeProduct(int productID)
+        public void removeProduct(object sender, EventArgs e)
         {
-            return Inventory.RemoveProduct(productID);
+            if (ProductsTable.SelectedRows.Count > 0)
+            {
+                var confirmResult = MessageBox.Show("Are you sure you want to delete this product?", "Confirm Delete", MessageBoxButtons.YesNo);
+                if (confirmResult == DialogResult.Yes)
+                {
+                    foreach (DataGridViewRow item in ProductsTable.SelectedRows)
+                    {
+                        Product product = item.Tag as Product;
+                        if (product != null)
+                        {
+                            Inventory.RemoveProduct(product);
+                        }
+                    }
+                    LoadProductsTable();
+                }
+            }
+            else
+            {
+                MessageBox.Show("Please select a product to delete.");
+            }
         }
 
         public Product lookupProduct(int productID)
@@ -104,9 +126,28 @@ namespace C968
             return Inventory.LookupProduct(productID);
         }
 
-        public void updateProduct(int productID, Product updatedProduct)
+        private void updateProduct(object sender, EventArgs e)
         {
-            Inventory.UpdateProduct(productID, updatedProduct);
+            if (ProductsTable.SelectedRows.Count > 0)
+            {
+                DataGridViewRow selectedRow = ProductsTable.SelectedRows[0];
+                Product selectedProduct = selectedRow.Tag as Product;
+                if (selectedProduct == null)
+                {
+                    MessageBox.Show("No product selected or product information is missing.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+
+                EditProductModal editProductModal = new EditProductModal(selectedProduct);
+                if (editProductModal.ShowDialog() == DialogResult.OK)
+                {
+                    LoadProductsTable();
+                }
+            }
+            else
+            {
+                MessageBox.Show("Please select a product to edit.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
         }
 
 
@@ -165,7 +206,6 @@ namespace C968
                 EditPartModal editPartModal = new EditPartModal(selectedPart);
                 if (editPartModal.ShowDialog() == DialogResult.OK)
                 {
-                    Inventory.UpdatePart(selectedPart.PartID, selectedPart);
                     LoadPartsTable();
                 }
             }
@@ -174,6 +214,7 @@ namespace C968
                 MessageBox.Show("Please select a part to edit.");
             }
         }
+
 
         private void searchPartButton_Click(object sender, EventArgs e)
         {
@@ -208,13 +249,19 @@ namespace C968
                 }
                 else
                 {
-                    MessageBox.Show("No part found with the specified ID.", "Part Not Found", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    MessageBox.Show("No product found with the specified ID.", "Product Not Found", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 }
             }
             else
             {
-                MessageBox.Show("Please enter a valid part ID.", "Invalid Input", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Please enter a valid product ID.", "Invalid Input", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+        }
+
+
+        private void ExitButton_Click(object sender, EventArgs e)
+        {
+            Application.Exit();
         }
     }
 }

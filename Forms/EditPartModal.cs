@@ -82,17 +82,18 @@ namespace C968
             {
                 MessageBox.Show("Please correct your input. Ensure all fields are filled out correctly and numerical fields contain valid numbers.", "Input Validation Failed", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
+            } else {
+                Inventory.UpdatePart(currentPart.PartID, part);
+                this.DialogResult = DialogResult.OK;
+                this.Close();
             }
-
-            Inventory.UpdatePart(currentPart.PartID, part);
-            this.DialogResult = DialogResult.OK;
-            this.Close();
         }
 
         private bool ValidateInput(out Part part)
         {
             part = null;
             if (!int.TryParse(IDTextBox.Text, out int partID) ||
+                string.IsNullOrWhiteSpace(NameTextBox.Text) ||
                 !int.TryParse(InventoryTextBox.Text, out int inventory) ||
                 !decimal.TryParse(PartCostTextBox.Text, out decimal price) ||
                 !int.TryParse(MinTextBox.Text, out int min) ||

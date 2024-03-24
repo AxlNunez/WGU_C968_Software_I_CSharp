@@ -24,15 +24,15 @@ namespace C968
             InHouseRadio.CheckedChanged += radioButtons_CheckedChanged;
             OutsourceRadio.CheckedChanged += radioButtons_CheckedChanged;
             CancelButton.Click += cancelButton_Click;
-            NameTextBox.TextChanged += (sender, e) => UpdateSaveButtonState();
-            InventoryTextBox.TextChanged += (sender, e) => UpdateSaveButtonState();
-            PartCostTextBox.TextChanged += (sender, e) => UpdateSaveButtonState();
-            MinTextBox.TextChanged += (sender, e) => UpdateSaveButtonState();
-            MaxTextBox.TextChanged += (sender, e) => UpdateSaveButtonState();
-            CompanyNameTextBox.TextChanged += (sender, e) => UpdateSaveButtonState();
-            MachineIDTextBox.TextChanged += (sender, e) => UpdateSaveButtonState();
-            InHouseRadio.CheckedChanged += (sender, e) => UpdateSaveButtonState();
-            OutsourceRadio.CheckedChanged += (sender, e) => UpdateSaveButtonState();
+            NameTextBox.TextChanged += (s, e) => UpdateSaveButtonState();
+            InventoryTextBox.TextChanged += (s, e) => UpdateSaveButtonState();
+            PartCostTextBox.TextChanged += (s, e) => UpdateSaveButtonState();
+            MinTextBox.TextChanged += (s, e) => UpdateSaveButtonState();
+            MaxTextBox.TextChanged += (s, e) => UpdateSaveButtonState();
+            CompanyNameTextBox.TextChanged += (s, e) => UpdateSaveButtonState();
+            MachineIDTextBox.TextChanged += (s, e) => UpdateSaveButtonState();
+            InHouseRadio.CheckedChanged += (s, e) => UpdateSaveButtonState();
+            OutsourceRadio.CheckedChanged += (s, e) => UpdateSaveButtonState();
             UpdateSaveButtonState();
             SaveButton.Click += SaveButton_Click;
         }

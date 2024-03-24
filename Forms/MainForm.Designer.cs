@@ -61,6 +61,7 @@ namespace C968
             ProductDeleteButton = new Button();
             ProductModifyButton = new Button();
             ProductAddButton = new Button();
+            ExitButton = new Button();
             ((System.ComponentModel.ISupportInitialize)PartsTable).BeginInit();
             ((System.ComponentModel.ISupportInitialize)ProductsTable).BeginInit();
             SuspendLayout();
@@ -162,6 +163,7 @@ namespace C968
             ProductsTable.Name = "ProductsTable";
             ProductsTable.RowHeadersVisible = false;
             ProductsTable.RowTemplate.Height = 25;
+            ProductsTable.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             ProductsTable.Size = new Size(608, 299);
             ProductsTable.TabIndex = 4;
             // 
@@ -177,10 +179,10 @@ namespace C968
             Name2.Name = "Name2";
             Name2.ReadOnly = true;
             // 
-            // Inventory1
+            // InStock1
             // 
             InStock1.HeaderText = "Inventory";
-            InStock1.Name = "Inventory1";
+            InStock1.Name = "InStock1";
             InStock1.ReadOnly = true;
             // 
             // Price1
@@ -304,11 +306,21 @@ namespace C968
             ProductAddButton.Text = "Add";
             ProductAddButton.UseVisualStyleBackColor = true;
             // 
+            // ExitButton
+            // 
+            ExitButton.Location = new Point(1172, 435);
+            ExitButton.Name = "ExitButton";
+            ExitButton.Size = new Size(75, 29);
+            ExitButton.TabIndex = 16;
+            ExitButton.Text = "Exit";
+            ExitButton.UseVisualStyleBackColor = true;
+            // 
             // MainForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1257, 512);
+            Controls.Add(ExitButton);
             Controls.Add(ProductDeleteButton);
             Controls.Add(ProductModifyButton);
             Controls.Add(ProductAddButton);
@@ -365,5 +377,6 @@ namespace C968
         private Button ProductDeleteButton;
         private Button ProductModifyButton;
         private Button ProductAddButton;
+        private Button ExitButton;
     }
 }

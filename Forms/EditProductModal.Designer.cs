@@ -1,6 +1,6 @@
 ﻿namespace C968.Forms
 {
-    partial class AddProductModal
+    partial class EditProductModal
     {
         /// <summary>
         /// Required designer variable.
@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(AddProductModal));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(EditProductModal));
             AddProductLabel = new Label();
             MinTextBox = new TextBox();
             MinLabel = new Label();
@@ -78,9 +78,9 @@
             AddProductLabel.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point);
             AddProductLabel.Location = new Point(12, 20);
             AddProductLabel.Name = "AddProductLabel";
-            AddProductLabel.Size = new Size(105, 21);
+            AddProductLabel.Size = new Size(104, 21);
             AddProductLabel.TabIndex = 2;
-            AddProductLabel.Text = "Add Product";
+            AddProductLabel.Text = "Edit Product";
             // 
             // MinTextBox
             // 
@@ -402,7 +402,7 @@
             ProductPartsLabel.TabIndex = 41;
             ProductPartsLabel.Text = "Parts Associated with this Product";
             // 
-            // AddProductModal
+            // EditProductModal
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
@@ -431,7 +431,7 @@
             Controls.Add(IDLabel);
             Controls.Add(AddProductLabel);
             Icon = (Icon)resources.GetObject("$this.Icon");
-            Name = "AddProductModal";
+            Name = "EditProductModal";
             StartPosition = FormStartPosition.CenterScreen;
             Text = "Product";
             ((System.ComponentModel.ISupportInitialize)PartsTable).EndInit();
